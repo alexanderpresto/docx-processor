@@ -1,0 +1,10 @@
+Metadata-Version: 2.2
+Name: docx-processor
+Version: 0.1.0
+Summary: Python application to convert Word documents into analyzable formats
+Requires-Python: >=3.8
+Description-Content-Type: text/markdown
+Requires-Dist: mammoth>=1.5.0
+Requires-Dist: beautifulsoup4>=4.11.0
+Requires-Dist: Pillow>=9.0.0
+Requires-Dist: lxml>=4.9.0

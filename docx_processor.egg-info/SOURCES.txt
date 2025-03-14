@@ -1,0 +1,11 @@
+README.md
+pyproject.toml
+setup.py
+docx_processor.egg-info/PKG-INFO
+docx_processor.egg-info/SOURCES.txt
+docx_processor.egg-info/dependency_links.txt
+docx_processor.egg-info/entry_points.txt
+docx_processor.egg-info/requires.txt
+docx_processor.egg-info/top_level.txt
+tests/__init__.py
+tests/test_processor.py

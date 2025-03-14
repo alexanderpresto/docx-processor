@@ -1,0 +1,13 @@
+name: docx-processor
+channels:
+  - conda-forge
+  - defaults
+dependencies:
+  - python>=3.8
+  - mammoth
+  - beautifulsoup4
+  - pillow
+  - lxml
+  - pip
+  - build
+  - setuptools>=64.0.0
