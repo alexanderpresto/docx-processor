@@ -2,8 +2,8 @@ import os
 import json
 import mammoth
 from bs4 import BeautifulSoup
-from .image_handler import extract_images
-from .html_generator import create_index_html
+from src.docx_processor.image_handler import extract_images
+from src.docx_processor.html_generator import create_index_html
 
 def process_document(file_path, output_dir, image_quality=85, max_image_size=1200, 
                      output_format="both", extract_tables=False):
@@ -14,10 +14,10 @@ def process_document(file_path, output_dir, image_quality=85, max_image_size=120
     
     # Extract raw content with mammoth
     with open(file_path, "rb") as docx_file:
-        result = mammoth.extract_raw({
-            "path": docx_file,
-            "convert_image": mammoth.images.img_element
-        })
+        result = mammoth.convert_to_html(
+            docx_file,
+            convert_image=mammoth.images.img_element
+        )
         html = result.value
         messages = result.messages
     

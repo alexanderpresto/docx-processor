@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 import os
 import argparse
-from src.processor import process_document
+from src.docx_processor.processor import process_document
 
 def main():
     parser = argparse.ArgumentParser(description="Process Word documents into analyzable formats")

@@ -1,0 +1,11 @@
+# Runtime dependencies
+python-mammoth==1.5.1  # DOCX parsing and conversion
+beautifulsoup4==4.11.1  # HTML/XML parsing
+Pillow==9.3.0  # Image processing and optimization
+lxml==4.9.1  # Enhanced XML processing
+
+# Development dependencies (optional)
+pytest>=7.0.0  # Testing
+black>=22.0.0  # Code formatting
+pylint>=2.12.0  # Linting
+mypy>=0.950  # Type checking
