@@ -1,9 +1,36 @@
 import os
 import json
-import mammoth
+import sys
+import zipfile  # For direct zipfile handling of docx
+
+# Import mammoth with diagnostic information
+try:
+    import mammoth
+    print(f"Successfully imported mammoth version: {getattr(mammoth, '__version__', 'unknown')}")
+    print(f"Mammoth package location: {getattr(mammoth, '__file__', 'unknown')}")
+except ImportError as e:
+    print(f"Failed to import mammoth: {e}")
+    sys.exit(1)
+
 from bs4 import BeautifulSoup
-from src.docx_processor.image_handler import extract_images
-from src.docx_processor.html_generator import create_index_html
+from docx_processor.image_handler import extract_images
+from docx_processor.html_generator import create_index_html
+from docx_processor.fallback_processor import extract_document_text
+
+# Custom style mappings to handle unsupported document styles
+STYLE_MAP = """
+p[style-name='toc 1'] => p.toc-1:fresh
+p[style-name='TOC1'] => p.toc-1:fresh
+p[style-name='toc 2'] => p.toc-2:fresh
+p[style-name='TOC2'] => p.toc-2:fresh
+p[style-name='toc 3'] => p.toc-3:fresh
+p[style-name='TOC3'] => p.toc-3:fresh
+p[style-name='Normal Single Spaced'] => p
+p[style-name='NormalSingleSpaced'] => p
+p[style-name='Normal Indent'] => p.indented
+p[style-name='NormalIndent'] => p.indented
+p[style-name='CodeBlock'] => pre.code-block
+"""
 
 def process_document(file_path, output_dir, image_quality=85, max_image_size=1200, 
                      output_format="both", extract_tables=False):
@@ -12,26 +39,141 @@ def process_document(file_path, output_dir, image_quality=85, max_image_size=120
     # Create output directory if it doesn't exist
     os.makedirs(output_dir, exist_ok=True)
     
-    # Extract raw content with mammoth
-    with open(file_path, "rb") as docx_file:
-        result = mammoth.convert_to_html(
-            docx_file,
-            convert_image=mammoth.images.img_element
-        )
-        html = result.value
-        messages = result.messages
+    # Try multiple approaches to extract content
+    html = None
+    try_count = 0
+    error_details = []
+    
+    # 1. First try: Using convert_to_html with img_element for proper image handling
+    try:
+        try_count += 1
+        print(f"Attempt {try_count}: Converting to HTML with img_element for image extraction")
+        with open(file_path, "rb") as docx_file:
+            result = mammoth.convert_to_html(
+                docx_file, 
+                convert_image=mammoth.images.img_element,
+                style_map=STYLE_MAP
+            )
+            html = result.value
+            messages = result.messages
+            print(f"Conversion messages: {messages}")
+    except Exception as e:
+        error_details.append(f"Attempt {try_count} failed: {str(e)}")
+        print(error_details[-1])
+    
+    # 2. Second try: Convert to HTML using data_uri
+    if html is None:
+        try:
+            try_count += 1
+            print(f"Attempt {try_count}: Converting to HTML with data_uri")
+            with open(file_path, "rb") as docx_file:
+                result = mammoth.convert_to_html(
+                    docx_file, 
+                    convert_image=mammoth.images.data_uri,
+                    style_map=STYLE_MAP
+                )
+                html = result.value
+                messages = result.messages
+                print(f"Conversion messages: {messages}")
+        except Exception as e:
+            error_details.append(f"Attempt {try_count} failed: {str(e)}")
+            print(error_details[-1])
+    
+    # 3. Third try: Basic HTML conversion without image handling
+    if html is None:
+        try:
+            try_count += 1
+            print(f"Attempt {try_count}: Basic HTML conversion without image handling")
+            with open(file_path, "rb") as docx_file:
+                result = mammoth.convert_to_html(
+                    docx_file,
+                    style_map=STYLE_MAP
+                )
+                html = result.value
+                messages = result.messages
+                print(f"Conversion messages: {messages}")
+        except Exception as e:
+            error_details.append(f"Attempt {try_count} failed: {str(e)}")
+            print(error_details[-1])
+    
+    # 4. Check if document has any embedded images using zipfile directly
+    try:
+        # DOCX files are actually ZIP archives, so we can open them directly
+        with zipfile.ZipFile(file_path, 'r') as zip_ref:
+            # Check if there are any image files in the Word document
+            image_files = [name for name in zip_ref.namelist() if 
+                          name.startswith('word/media/') and 
+                          name.lower().endswith(('.png', '.jpg', '.jpeg', '.gif', '.bmp'))]
+            
+            if image_files:
+                print(f"Document contains {len(image_files)} embedded images: {', '.join(image_files[:5])}")
+                if len(image_files) > 5:
+                    print(f"...and {len(image_files) - 5} more")
+            else:
+                print("Document does not contain any embedded images in the standard location")
+                
+                # Also check for other potential image locations
+                other_images = [name for name in zip_ref.namelist() if 
+                               name.lower().endswith(('.png', '.jpg', '.jpeg', '.gif', '.bmp')) and 
+                               not name.startswith('word/media/')]
+                if other_images:
+                    print(f"Found {len(other_images)} images in non-standard locations: {', '.join(other_images[:5])}")
+    except Exception as e:
+        print(f"Could not check for embedded images: {str(e)}")
+    
+    # 5. Last resort: Extract raw text
+    if html is None:
+        try:
+            try_count += 1
+            print(f"Attempt {try_count}: Falling back to plain text extraction")
+            text = extract_document_text(file_path)
+            if text:
+                # Convert plain text to simple HTML
+                html = f"<html><body>\n"
+                for paragraph in text.split("\n\n"):
+                    if paragraph.strip():
+                        html += f"<p>{paragraph}</p>\n"
+                html += "</body></html>"
+                print("Successfully extracted text and converted to basic HTML")
+        except Exception as e:
+            error_details.append(f"Attempt {try_count} failed: {str(e)}")
+            print(error_details[-1])
+    
+    if html is None:
+        error_message = "All attempts to extract document content failed:\n" + "\n".join(error_details)
+        print(error_message)
+        raise RuntimeError(error_message)
+    
+    # Print HTML snippet for debugging image tags
+    print(f"HTML snippet (first 500 chars): {html[:500]}")
     
     # Parse with BeautifulSoup
-    soup = BeautifulSoup(html, 'html.parser')
-    
-    # Extract structure
-    document_data = {
-        "title": extract_title(soup),
-        "sections": extract_sections(soup),
-        "tables": extract_tables_from_soup(soup),
-        "images": extract_images(soup, output_dir, quality=image_quality, max_size=max_image_size),
-        "references": extract_references(soup)
-    }
+    try:
+        soup = BeautifulSoup(html, 'html.parser')
+        
+        # Debug: Print all image tags found
+        img_tags = soup.find_all('img')
+        print(f"BeautifulSoup found {len(img_tags)} image tags")
+        for i, img in enumerate(img_tags[:3]):  # Show first 3 images for debugging
+            print(f"Image {i} attributes: {img.attrs}")
+        
+        # Extract structure with error handling
+        document_data = {
+            "title": extract_title(soup),
+            "sections": extract_sections(soup),
+            "tables": extract_tables_from_soup(soup),
+            "images": [],  # Initialize with empty list
+            "references": extract_references(soup)
+        }
+        
+        # Extract images separately with error handling
+        try:
+            document_data["images"] = extract_images(soup, output_dir, quality=image_quality, max_size=max_image_size)
+        except Exception as e:
+            print(f"Warning: Failed to extract images: {e}")
+    except Exception as e:
+        print(f"Error parsing HTML: {e}")
+        raise
     
     # Save to JSON if requested
     if output_format in ["json", "both"]:
@@ -54,6 +196,12 @@ def extract_title(soup):
     h1 = soup.find('h1')
     if h1:
         return h1.get_text()
+    
+    # If no h1, try to find the first strong text as title
+    strong = soup.find('strong')
+    if strong:
+        return strong.get_text()
+        
     return "Untitled Document"
 
 def extract_sections(soup):
@@ -85,6 +233,18 @@ def extract_sections(soup):
             "title": current_header.get_text(),
             "content": "\n".join(current_content)
         })
+    
+    # If no sections found with headers, create a single section from the document
+    if not sections and soup.find('p'):
+        paragraphs = [p.get_text() for p in soup.find_all('p')]
+        if paragraphs:
+            first_para = paragraphs[0]
+            remaining = "\n".join(paragraphs[1:]) if len(paragraphs) > 1 else ""
+            sections.append({
+                "level": 1,
+                "title": first_para[:50] + ("..." if len(first_para) > 50 else ""),
+                "content": remaining
+            })
     
     return sections
 

@@ -4,8 +4,8 @@ import argparse
 import sys
 import traceback
 
-from . import __version__
-
+# Import version from dedicated module to avoid circular imports
+from .version import __version__
 from .processor import process_document
 
 def main():

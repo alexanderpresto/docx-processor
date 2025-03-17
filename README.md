@@ -8,6 +8,8 @@ Convert Word documents into analyzable formats while preserving structure and im
 - **Image Extraction:** Optimized embedded images with quality and size controls
 - **Table Extraction:** Convert document tables to structured data
 - **HTML Preview:** Navigable document preview with all components
+- **Custom Style Handling:** Maps custom Word styles to appropriate HTML elements
+- **Robust Fallback Processing:** Multiple extraction approaches with graceful degradation
 
 ## Installation
 
@@ -84,11 +86,13 @@ The processor generates the following outputs:
 docx-processor/
 ├── src/
 │   └── docx_processor/       # Core package
-│       ├── __init__.py
+│       ├── __init__.py       # Package initialization
+│       ├── version.py        # Version information
 │       ├── processor.py      # Document processing functionality
 │       ├── image_handler.py  # Image extraction and optimization
 │       ├── html_generator.py # HTML preview creation
 │       ├── cli.py            # Command-line interface
+│       ├── fallback_processor.py # Fallback text extraction
 │       └── utils.py          # Helper functions and utilities
 ├── tests/
 │   ├── __init__.py
@@ -130,8 +134,33 @@ pytest
 
 - Package configuration is handled in both setup.py and pyproject.toml
 - The CLI is implemented in src/docx_processor/cli.py
-- Make sure to run unit tests when making changes to core functionality
-- Running in development mode allows changes to be reflected immediately
+- The version information is defined in version.py to avoid circular imports
+- Multiple fallback mechanisms ensure document processing completes even with partial failure
+- Custom style mappings in processor.py can be extended to handle additional document styles
+- Image extraction uses a combination of mammoth's image conversion and direct DOCX inspection
+- Diagnostic information is provided during processing to aid in troubleshooting
+
+#### Implementation Details
+
+1. **Modular Architecture:**
+   - The processor module orchestrates the document conversion process
+   - Image handling is separated into image_handler.py for better maintainability
+   - Style mappings define how Word styles translate to HTML elements
+
+2. **Robust Processing Pipeline:**
+   - Multiple conversion attempts with different strategies
+   - Detailed error reporting at each stage
+   - Diagnostic information about document structure and content
+
+3. **Document Inspection:**
+   - Direct inspection of DOCX files (which are ZIP archives)
+   - Detection of embedded images and other media
+   - Support for various document structures
+
+4. **Circular Import Prevention:**
+   - Version information isolated in version.py
+   - Careful import order in __init__.py
+   - Proper separation of concerns across modules
 
 ## Contributing
 
