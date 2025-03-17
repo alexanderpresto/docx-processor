@@ -63,6 +63,35 @@ We encourage you to contribute directly to the codebase through pull requests:
    pip install -e .
    ```
 
+4. Verify the installation works:
+
+   ```bash
+   docx-processor --version
+   ```
+
+## Package Structure
+
+The project is organized as follows:
+
+```
+docx-processor/
+├── src/
+│   └── docx_processor/       # Core package
+│       ├── __init__.py
+│       ├── processor.py      # Document processing functionality
+│       ├── image_handler.py  # Image extraction and optimization
+│       ├── html_generator.py # HTML preview creation
+│       ├── cli.py            # Command-line interface
+│       └── utils.py          # Helper functions and utilities
+├── tests/                  # Test directory
+```
+
+When adding new features:
+
+- Core functionality should be added to the appropriate module in `src/docx_processor/`
+- New CLI options should be added to `cli.py`
+- Package configuration is managed in both `setup.py` and `pyproject.toml`
+
 ## Coding Standards
 
 - Follow PEP 8 style guide for Python code

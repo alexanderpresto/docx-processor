@@ -45,25 +45,17 @@ pip install -e .
 ### Basic Usage
 
 ```bash
-python main.py input.docx output_directory
+docx-processor input.docx output_directory
 ```
 
 ### Advanced Options
 
 ```bash
-python main.py input.docx output_directory \
+docx-processor input.docx output_directory \
     --image-quality 90 \
     --max-image-size 800 \
     --format html \
     --extract-tables
-```
-
-### As an Installed Package
-
-If you installed the package, you can use the command-line tool directly:
-
-```bash
-docx-processor input.docx output_directory
 ```
 
 ## Output
@@ -86,11 +78,34 @@ The processor generates the following outputs:
 | `--format` | Output format (json, html, or both) | both |
 | `--extract-tables` | Extract tables to CSV files | False |
 
+## Project Structure
+
+```
+docx-processor/
+├── src/
+│   └── docx_processor/       # Core package
+│       ├── __init__.py
+│       ├── processor.py      # Document processing functionality
+│       ├── image_handler.py  # Image extraction and optimization
+│       ├── html_generator.py # HTML preview creation
+│       ├── cli.py            # Command-line interface
+│       └── utils.py          # Helper functions and utilities
+├── tests/
+│   ├── __init__.py
+│   ├── test_processor.py     # Unit tests for processor module
+│   └── test_data/
+│       └── sample.docx       # Test document for validation
+├── requirements.txt          # Project dependencies
+├── setup.py                  # Package installation configuration
+├── pyproject.toml           # Modern Python packaging configuration
+└── README.md                 # Project documentation
+```
+
 ## Requirements
 
 - Python 3.8+
 - Dependencies:
-  - python-mammoth (>=1.5.0)
+  - mammoth (>=1.5.0)
   - beautifulsoup4 (>=4.11.0)
   - Pillow (>=9.0.0)
   - lxml (>=4.9.0)
@@ -110,6 +125,13 @@ pip install -e .
 # Run tests
 pytest
 ```
+
+### Development Notes
+
+- Package configuration is handled in both setup.py and pyproject.toml
+- The CLI is implemented in src/docx_processor/cli.py
+- Make sure to run unit tests when making changes to core functionality
+- Running in development mode allows changes to be reflected immediately
 
 ## Contributing
 

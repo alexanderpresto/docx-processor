@@ -2,7 +2,7 @@ import unittest
 import os
 import shutil
 import json
-from src.processor import process_document
+from docx_processor.processor import process_document
 
 class TestProcessor(unittest.TestCase):
     def setUp(self):

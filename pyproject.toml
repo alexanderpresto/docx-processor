@@ -16,7 +16,8 @@ dependencies = [
 ]
 
 [project.scripts]
-docx-processor = "main:main"
+docx-processor = "docx_processor.cli:main"
 
 [tool.setuptools]
-packages = ["src"]
+package-dir = {"" = "src"}
+packages = ["docx_processor"]
