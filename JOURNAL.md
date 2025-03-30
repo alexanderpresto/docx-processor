@@ -30,6 +30,18 @@ A chronological record of key development decisions, challenges, and progress fo
   - Modular code organization approach
   - Image processing strategy
 
+## 2025-03-30: Python Environment Migration and Dependency Updates
+
+- Migrated from Anaconda to standard Python virtual environment
+- Updated dependency management:
+  - Corrected package name from `python-mammoth` to `mammoth`
+  - Updated mammoth to latest version (1.9.0)
+  - Resolved Pillow compatibility issues with newer Python versions (>=10.0.0)
+  - Updated lxml dependency to use pre-compiled wheels (>=5.0.0)
+- Dependencies now correctly specified for standard pip installation
+- Verified proper installation process with virtual environment for cross-platform compatibility
+- Updated documentation with installation instructions for standard Python environments
+
 ## Next Steps
 
 - Implement unit tests for core functionality
