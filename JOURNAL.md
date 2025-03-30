@@ -42,6 +42,21 @@ A chronological record of key development decisions, challenges, and progress fo
 - Verified proper installation process with virtual environment for cross-platform compatibility
 - Updated documentation with installation instructions for standard Python environments
 
+## 2025-03-30: Improved Path Handling and Installation Options
+
+- Addressed issue with running docx-processor from outside project directory:
+  - Modified `main.py` to handle absolute paths for input and output files
+  - Added path resolution logic to ensure proper file access regardless of execution directory
+  - Created `__main__.py` for package execution via `python -m src`
+- Created proper installation options:
+  - Improved documentation for development mode installation with `pip install -e .`
+  - Addressed file permission issues when accessing files from other directories
+  - Enhanced error handling to provide better feedback for access permission problems
+- Documented troubleshooting steps for common installation and execution issues:
+  - Permission errors
+  - File access problems
+  - Python environment configuration
+
 ## Next Steps
 
 - Implement unit tests for core functionality
