@@ -6,16 +6,14 @@ import zipfile  # For direct zipfile handling of docx
 # Import mammoth with diagnostic information
 try:
     import mammoth
-    print(f"Successfully imported mammoth version: {getattr(mammoth, '__version__', 'unknown')}")
-    print(f"Mammoth package location: {getattr(mammoth, '__file__', 'unknown')}")
 except ImportError as e:
     print(f"Failed to import mammoth: {e}")
     sys.exit(1)
 
 from bs4 import BeautifulSoup
-from docx_processor.image_handler import extract_images
-from docx_processor.html_generator import create_index_html
-from docx_processor.fallback_processor import extract_document_text
+from .image_handler import extract_images
+from .html_generator import create_index_html
+from .fallback_processor import extract_document_text
 
 # Custom style mappings to handle unsupported document styles
 STYLE_MAP = """

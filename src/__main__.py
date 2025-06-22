@@ -6,7 +6,8 @@ Allows running the package with: python -m src
 import os
 import argparse
 import sys
-from .processor import process_document
+from .docx_processor.processor import process_document
+from .docx_processor.version import __version__
 
 def main():
     """Main entry point for the docx-processor application."""
@@ -24,7 +25,7 @@ def main():
                        help="Output format (json, html, or both)")
     parser.add_argument("--extract-tables", action="store_true", 
                        help="Extract tables to CSV files")
-    parser.add_argument("--version", action="version", version="docx-processor 0.1.0")
+    parser.add_argument("--version", action="version", version=f"docx-processor {__version__}")
     
     args = parser.parse_args()
     

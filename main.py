@@ -2,15 +2,10 @@
 import os
 import argparse
 import sys
-import inspect
 
-# Add the parent directory to sys.path to make the src package importable
-current_dir = os.path.dirname(os.path.abspath(inspect.getfile(inspect.currentframe())))
-parent_dir = os.path.dirname(current_dir)
-sys.path.insert(0, parent_dir) 
-
-# Import after path adjustment
-from src.processor import process_document
+# Import from the new package structure
+from src.docx_processor.processor import process_document
+from src.docx_processor.version import __version__
 
 def main():
     """Main entry point for the docx-processor application."""
@@ -28,7 +23,7 @@ def main():
                        help="Output format (json, html, or both)")
     parser.add_argument("--extract-tables", action="store_true", 
                        help="Extract tables to CSV files")
-    parser.add_argument("--version", action="version", version="docx-processor 0.1.0")
+    parser.add_argument("--version", action="version", version=f"docx-processor {__version__}")
     
     args = parser.parse_args()
     
