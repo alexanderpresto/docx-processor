@@ -86,6 +86,41 @@ desktop-commander:execute_command(
 3. **Scripts**: `.ps1` for Windows, `.sh` for Linux
 4. **Permissions**: Windows uses `icacls`, Linux uses `chmod`
 
+## Command Examples (v2.0)
+
+### Basic Document Processing
+
+**Both Platforms:**
+```bash
+python main.py document.docx output/
+```
+
+### ✨ NEW: Chunking Commands
+
+**Enable Chunking (Both Platforms):**
+```bash
+# Basic chunking
+python main.py document.docx output/ --enable-chunking
+
+# Custom chunk size
+python main.py document.docx output/ --enable-chunking --max-chunk-tokens 1500 --chunk-overlap 150
+
+# Chunking with other options
+python main.py document.docx output/ --enable-chunking --extract-tables --format json
+```
+
+### Platform-Specific Examples
+
+**Windows (PowerShell):**
+```powershell
+python main.py "D:\Documents\report.docx" "D:\Output\" --enable-chunking
+```
+
+**WSL2/Linux (Bash):**
+```bash
+python main.py /mnt/d/Documents/report.docx /mnt/d/Output/ --enable-chunking
+```
+
 ## WSL2 Special Notes
 
 - WSL2 accesses Windows drives through mount points (`/mnt/c/`, `/mnt/d/`, etc.)

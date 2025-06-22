@@ -14,6 +14,7 @@ from bs4 import BeautifulSoup
 from .image_handler import extract_images
 from .html_generator import create_index_html
 from .fallback_processor import extract_document_text
+from .chunking import DocumentChunker
 
 # Custom style mappings to handle unsupported document styles
 STYLE_MAP = """
@@ -31,7 +32,8 @@ p[style-name='CodeBlock'] => pre.code-block
 """
 
 def process_document(file_path, output_dir, image_quality=85, max_image_size=1200, 
-                     output_format="both", extract_tables=False):
+                     output_format="both", extract_tables=False, 
+                     enable_chunking=False, max_chunk_tokens=2000, chunk_overlap=200):
     """Process Word document, extract content and images into structured JSON format."""
     
     # Create output directory if it doesn't exist
@@ -186,6 +188,46 @@ def process_document(file_path, output_dir, image_quality=85, max_image_size=120
     # Extract tables to CSV if requested
     if extract_tables and document_data["tables"]:
         save_tables_to_csv(document_data["tables"], output_dir)
+    
+    # Apply chunking if requested
+    if enable_chunking:
+        print(f"Applying intelligent chunking with max_tokens={max_chunk_tokens}, overlap={chunk_overlap}")
+        chunker = DocumentChunker(
+            max_tokens=max_chunk_tokens,
+            overlap_tokens=chunk_overlap,
+            respect_boundaries=True
+        )
+        
+        # Chunk the document sections
+        chunks = chunker.chunk_document_sections(document_data["sections"])
+        chunk_summary = chunker.create_chunk_summary(chunks)
+        
+        # Add chunking results to document data
+        document_data["chunks"] = [
+            {
+                "id": chunk.id,
+                "content": chunk.content,
+                "token_count": chunk.token_count,
+                "char_count": chunk.char_count,
+                "start_index": chunk.start_index,
+                "end_index": chunk.end_index,
+                "overlap_tokens": chunk.overlap_tokens,
+                "metadata": chunk.metadata
+            }
+            for chunk in chunks
+        ]
+        document_data["chunk_summary"] = chunk_summary
+        
+        # Save chunked document as separate JSON file
+        if output_format in ["json", "both"]:
+            chunked_output = os.path.join(output_dir, "document_chunks.json")
+            with open(chunked_output, 'w') as f:
+                json.dump({
+                    "chunks": document_data["chunks"],
+                    "summary": chunk_summary,
+                    "source_document": os.path.basename(file_path)
+                }, f, indent=2)
+            print(f"Saved {len(chunks)} chunks to {chunked_output}")
     
     return document_data
 

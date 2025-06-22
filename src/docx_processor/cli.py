@@ -18,6 +18,12 @@ def main():
     parser.add_argument("--format", choices=["json", "html", "both"], default="both", 
                        help="Output format (json, html, or both)")
     parser.add_argument("--extract-tables", action="store_true", help="Extract tables to CSV files")
+    parser.add_argument("--enable-chunking", action="store_true", 
+                       help="Enable intelligent document chunking for AI processing")
+    parser.add_argument("--max-chunk-tokens", type=int, default=2000,
+                       help="Maximum tokens per chunk (default: 2000)")
+    parser.add_argument("--chunk-overlap", type=int, default=200,
+                       help="Token overlap between chunks (default: 200)")
     parser.add_argument("--version", action="version", version=f"docx-processor {__version__}")
     
     args = parser.parse_args()
@@ -35,7 +41,10 @@ def main():
             image_quality=args.image_quality,
             max_image_size=args.max_image_size,
             output_format=args.format,
-            extract_tables=args.extract_tables
+            extract_tables=args.extract_tables,
+            enable_chunking=args.enable_chunking,
+            max_chunk_tokens=args.max_chunk_tokens,
+            chunk_overlap=args.chunk_overlap
         )
         print(f"Document processed successfully. Output saved to {args.output}")
         return 0

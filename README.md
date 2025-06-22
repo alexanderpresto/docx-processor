@@ -7,6 +7,7 @@ A Python application that transforms Microsoft Word documents into structured, a
 ## Features
 
 - **Document Structure Extraction**: Hierarchical sections based on headers with semantic preservation
+- **Intelligent Document Chunking**: ✨ **NEW in v2.0** - Split documents into AI-friendly chunks with token counting and context preservation
 - **Image Extraction**: Optimized embedded images with quality and size controls
 - **Table Extraction**: Convert document tables to structured data (CSV format)
 - **HTML Preview**: Interactive, navigable document preview with all components
@@ -80,23 +81,36 @@ python main.py input.docx output_directory \
     --format both \
     --extract-tables
 
+# ✨ NEW: Enable intelligent chunking for AI processing
+python main.py input.docx output_directory \
+    --enable-chunking \
+    --max-chunk-tokens 2000 \
+    --chunk-overlap 200
+
 # Using as installed package
-docx-processor input.docx output_directory
+docx-processor input.docx output_directory --enable-chunking
 ```
 
 ### Command Line Options
 
+**Standard Options:**
 - `--image-quality`: JPEG quality for extracted images (1-100, default: 85)
 - `--max-image-size`: Maximum dimension for resized images in pixels (default: 1200)
 - `--format`: Output format - json, html, or both (default: both)
 - `--extract-tables`: Extract tables to CSV files
 - `--version`: Show version information
 
+**✨ NEW Chunking Options (v2.0):**
+- `--enable-chunking`: Enable intelligent document chunking for AI processing
+- `--max-chunk-tokens`: Maximum tokens per chunk (default: 2000)
+- `--chunk-overlap`: Token overlap between chunks for context preservation (default: 200)
+
 ## Output Structure
 
 ```
 output_directory/
 ├── document_structure.json  # Complete document structure and content
+├── document_chunks.json     # ✨ NEW: AI-ready chunks (if --enable-chunking used)
 ├── index.html              # Interactive HTML preview
 ├── images/                 # Extracted and optimized images
 │   ├── image_0.png
@@ -114,6 +128,12 @@ output_directory/
   - Text content with formatting
   - Image references and metadata
   - Table data
+
+- **✨ document_chunks.json** (NEW): AI-ready document chunks featuring:
+  - Token-counted text segments
+  - Context preservation with overlap
+  - Section metadata and relationships
+  - Chunk boundary information
 
 - **index.html**: Interactive preview featuring:
   - Collapsible navigation sidebar

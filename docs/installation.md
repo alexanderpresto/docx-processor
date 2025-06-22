@@ -2,6 +2,8 @@
 
 This guide provides comprehensive instructions for installing and configuring the docx-processor package.
 
+> **Version Note**: This guide covers docx-processor v2.0.0-alpha with intelligent chunking features. For legacy v0.1.0 setup, see the archived documentation.
+
 ## Prerequisites
 
 - Python 3.8 or higher (verify version: `python --version`)
