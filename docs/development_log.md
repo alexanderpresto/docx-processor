@@ -2,6 +2,8 @@
 
 This document provides a formal record of the docx-processor development process.
 
+> **Note**: This project uses Basic-Memory for semantic knowledge management. Detailed development insights, bug fixes, and architectural decisions are documented in the Basic-Memory knowledge graph under the "dev" project. Use `search_notes("docx-processor topic")` to find related information.
+
 ## Version History
 
 ### v0.1.0 (2025-03-15)

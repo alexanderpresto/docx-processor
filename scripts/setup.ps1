@@ -2,6 +2,8 @@
 # Run from project root: .\scripts\setup.ps1
 
 Write-Host "Setting up docx-processor development environment..." -ForegroundColor Green
+Write-Host "Note: If using Claude AI assistant, ensure Basic-Memory 'dev' project is active" -ForegroundColor Cyan
+Write-Host ""
 
 # Check if we're in the project root
 if (-not (Test-Path ".\main.py")) {
@@ -24,6 +26,16 @@ if (-not (Test-Path ".\docx-processor-env")) {
 # Activate virtual environment
 Write-Host "Activating virtual environment..." -ForegroundColor Yellow
 & ".\docx-processor-env\Scripts\Activate.ps1"
+
+# Verify activation
+Write-Host "Verifying virtual environment activation..." -ForegroundColor Yellow
+$venvPath = python -c "import sys; print(sys.prefix)"
+if ($venvPath -notlike "*docx-processor-env*") {
+    Write-Host "Error: Virtual environment not properly activated!" -ForegroundColor Red
+    Write-Host "Expected path containing 'docx-processor-env', got: $venvPath" -ForegroundColor Red
+    exit 1
+}
+Write-Host "Virtual environment activated successfully: $venvPath" -ForegroundColor Green
 
 # Upgrade pip
 Write-Host "Upgrading pip..." -ForegroundColor Yellow

@@ -4,26 +4,35 @@ This guide provides comprehensive instructions for installing and configuring th
 
 ## Prerequisites
 
-- Python 3.7 or higher
+- Python 3.8 or higher (verify version: `python --version`)
 - pip (Python package manager)
+- **Virtual environment** (mandatory for development)
+
+## Critical Requirements
+
+⚠️ **IMPORTANT**: Virtual environment activation is MANDATORY for all development work. Never run Python commands without an activated virtual environment.
+
+## Platform Notes
+
+### Windows (Claude Desktop)
+- Use PowerShell or Command Prompt
+- Virtual environment activation: `.\docx-processor-env\Scripts\Activate.ps1`
+- Native Windows paths: `D:\Users\alexp\dev\docx-processor`
+
+### WSL2 (Claude Code on Ubuntu)
+- Project is on Windows D: drive, accessed via mount point
+- Use bash terminal
+- Virtual environment activation: `source docx-processor-env/bin/activate`
+- WSL2 paths: `/mnt/d/Users/alexp/dev/docx-processor`
+
+### Linux/Mac (Native)
+- Use terminal
+- Virtual environment activation: `source docx-processor-env/bin/activate`
+- Standard Unix paths
 
 ## Installation Methods
 
-### Method 1: Standard Installation
-
-```bash
-# Clone the repository
-git clone https://github.com/alexanderpresto/docx-processor.git
-cd docx-processor
-
-# Install dependencies
-pip install -r requirements.txt
-
-# Install the package
-pip install .
-```
-
-### Method 2: Development Mode Installation (Recommended)
+### Method 1: Development Mode Installation (Recommended)
 
 Development mode allows you to modify the code while still being able to use the package from anywhere on your system.
 
@@ -32,11 +41,43 @@ Development mode allows you to modify the code while still being able to use the
 git clone https://github.com/alexanderpresto/docx-processor.git
 cd docx-processor
 
+# Create virtual environment (MANDATORY)
+python -m venv docx-processor-env
+
+# Activate virtual environment
+# Windows:
+.\docx-processor-env\Scripts\Activate.ps1
+# Linux/Mac:
+source docx-processor-env/bin/activate
+
+# VERIFY activation (critical step)
+python -c "import sys; print(sys.prefix)"
+# Should show path to your virtual environment
+
+# Install dependencies
+pip install -r requirements.txt
+
 # Install in development mode
 pip install -e .
 ```
 
-This creates a special link in your Python environment that points to your project folder, making the package accessible from anywhere while allowing you to edit the code.
+### Method 2: Standard Installation
+
+⚠️ **WARNING**: Always use a virtual environment, even for standard installation.
+
+```bash
+# Clone the repository
+git clone https://github.com/alexanderpresto/docx-processor.git
+cd docx-processor
+
+# Create and activate virtual environment (see Method 1)
+
+# Install dependencies
+pip install -r requirements.txt
+
+# Install the package
+pip install .
+```
 
 ## Verification
 
@@ -81,7 +122,14 @@ If you see `[Errno 13] Permission denied` when accessing files:
 3. Try using absolute paths for both input and output files:
 
 ```bash
-docx-processor "C:\full\path\to\input.docx" "C:\full\path\to\output_directory"
+# Windows
+docx-processor "D:\full\path\to\input.docx" "D:\full\path\to\output_directory"
+
+# WSL2 (accessing Windows files)
+docx-processor "/mnt/d/full/path/to/input.docx" "/mnt/d/full/path/to/output_directory"
+
+# Linux/Mac
+docx-processor "/full/path/to/input.docx" "/full/path/to/output_directory"
 ```
 
 4. If needed, adjust file permissions:
@@ -90,7 +138,7 @@ docx-processor "C:\full\path\to\input.docx" "C:\full\path\to\output_directory"
 # Windows (PowerShell, run as Administrator)
 icacls "path\to\file.docx" /grant "$(whoami)":F
 
-# Linux/macOS
+# Linux/macOS/WSL2
 chmod 644 path/to/file.docx
 ```
 

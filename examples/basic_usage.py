@@ -4,6 +4,10 @@ Basic usage example for the docx-processor library.
 
 This example demonstrates how to use docx-processor as a Python library
 to process Word documents programmatically.
+
+IMPORTANT: Ensure your virtual environment is activated before running this example:
+    Windows: .\\docx-processor-env\\Scripts\\Activate.ps1
+    Linux/Mac: source docx-processor-env/bin/activate
 """
 
 import os

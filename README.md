@@ -2,6 +2,8 @@
 
 A Python application that transforms Microsoft Word documents into structured, analyzable formats while preserving document structure, images, and tables.
 
+> **IMPORTANT**: This project requires virtual environment activation for all development work. See [Development](#development) section for mandatory setup steps.
+
 ## Features
 
 - **Document Structure Extraction**: Hierarchical sections based on headers with semantic preservation
@@ -29,25 +31,38 @@ This tool bridges that gap, making Word documents truly AI-friendly.
 
 ### Setup with Virtual Environment
 
+**CRITICAL**: Always activate the virtual environment before any development work. This is mandatory, not optional.
+
 ```bash
 # Clone the repository
 git clone https://github.com/alexanderpresto/docx-processor.git
 cd docx-processor
 
-# Create and activate virtual environment (Windows)
+# Create and activate virtual environment (Windows - Claude Desktop)
 python -m venv docx-processor-env
 .\docx-processor-env\Scripts\Activate.ps1
+
+# Verify activation (should show virtual environment path)
+python -c "import sys; print(sys.prefix)"
 
 # Create and activate virtual environment (Linux/Mac)
 python -m venv docx-processor-env
 source docx-processor-env/bin/activate
 
-# Install dependencies
+# Create and activate virtual environment (WSL2 - Claude Code)
+# Note: Project is on Windows D: drive, accessed via mount point
+cd /mnt/d/Users/alexp/dev/docx-processor
+python -m venv docx-processor-env
+source docx-processor-env/bin/activate
+
+# Install dependencies (all platforms) - ONLY after activation
 pip install -r requirements.txt
 
-# Optional: Install as editable package
+# Optional: Install as editable package (all platforms)
 pip install -e .
 ```
+
+**Quick Windows Setup**: Run `.\scripts\setup.ps1` from project root for automated setup.
 
 ## Usage
 
@@ -107,6 +122,38 @@ output_directory/
 
 ## Development
 
+### Working Directory
+
+- **Primary**: `D:\Users\alexp\dev\docx-processor`
+- **Archive**: `D:\Users\alexp\dev\docx-processor\archive`
+
+### Development Workflow
+
+1. **Activate Virtual Environment** (mandatory):
+   ```bash
+   # Windows
+   .\docx-processor-env\Scripts\Activate.ps1
+   
+   # Verify activation
+   python -c "import sys; print(sys.prefix)"
+   ```
+
+2. **Check Basic-Memory Project Context** (if using Claude):
+   - Ensure "dev" project is active
+   - See CLAUDE.md for AI assistant guidelines
+
+3. **Archive Before Modifying**:
+   - Never overwrite existing files
+   - Archive to `archive\filename_YYYY-MM-DD.ext` before changes
+   - Use PowerShell for efficient archival:
+     ```powershell
+     Copy-Item -Path "src\file.py" -Destination "archive\file_2025-06-22.py"
+     ```
+
+4. **Document Changes**:
+   - Significant changes should be documented in Basic-Memory
+   - Use semantic relationships to connect related concepts
+
 ### Project Structure
 
 ```
@@ -124,6 +171,8 @@ docx-processor/
 ├── tests/                   # Test suite
 ├── examples/               # Usage examples
 └── scripts/               # Development scripts
+    ├── setup.ps1         # Windows setup script
+    └── setup.sh          # Linux/WSL2 setup script
 ```
 
 ### Version 2.0 Development
