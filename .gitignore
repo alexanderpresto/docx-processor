@@ -134,6 +134,7 @@ site/
 # Project-specific ignores
 archive/
 project-instructions.md
+CLAUDE.md
 .mypy_cache/
 *.egg-info/
 

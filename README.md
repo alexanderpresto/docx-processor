@@ -15,6 +15,7 @@ A Python application that transforms Microsoft Word documents into structured, a
 ## Why Use docx-processor?
 
 Despite AI advancements, language models still cannot:
+
 - Extract images embedded in Word documents
 - Preserve complex document structure reliably
 - Handle very large documents efficiently
@@ -130,6 +131,7 @@ output_directory/
 ### Development Workflow
 
 1. **Activate Virtual Environment** (mandatory):
+
    ```bash
    # Windows
    .\docx-processor-env\Scripts\Activate.ps1
@@ -146,6 +148,7 @@ output_directory/
    - Never overwrite existing files
    - Archive to `archive\filename_YYYY-MM-DD.ext` before changes
    - Use PowerShell for efficient archival:
+
      ```powershell
      Copy-Item -Path "src\file.py" -Destination "archive\file_2025-06-22.py"
      ```
@@ -178,6 +181,7 @@ docx-processor/
 ### Version 2.0 Development
 
 Currently planning version 2.0 with enhanced features:
+
 - Intelligent chunking for large documents
 - Enhanced metadata extraction
 - API framework with AI service integration
@@ -196,6 +200,7 @@ See `docs/requirements/` for detailed specifications.
 ## Requirements
 
 Core dependencies:
+
 - `mammoth` - DOCX parsing
 - `beautifulsoup4` - HTML manipulation
 - `Pillow` - Image processing
