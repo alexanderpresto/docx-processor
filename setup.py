@@ -2,7 +2,7 @@ from setuptools import setup, find_packages
 
 setup(
     name="docx-processor",
-    version="2.0.0-alpha",
+    version="2.0.0-beta",
     package_dir={"": "src"},
     packages=["docx_processor"],
     install_requires=[
@@ -11,6 +11,7 @@ setup(
         "Pillow>=9.0.0",
         "lxml>=4.9.0",
         "tiktoken>=0.5.0",
+        "python-docx>=1.1.0",
     ],
     entry_points={
         "console_scripts": [

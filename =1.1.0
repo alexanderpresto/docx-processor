@@ -1,0 +1,10 @@
+Collecting python-docx
+  Downloading python_docx-1.2.0-py3-none-any.whl.metadata (2.0 kB)
+Requirement already satisfied: lxml>=3.1.0 in d:\users\alexp\dev\docx-processor\docx-processor-env\lib\site-packages (from python-docx) (5.4.0)
+Collecting typing_extensions>=4.9.0 (from python-docx)
+  Using cached typing_extensions-4.14.0-py3-none-any.whl.metadata (3.0 kB)
+Downloading python_docx-1.2.0-py3-none-any.whl (252 kB)
+Using cached typing_extensions-4.14.0-py3-none-any.whl (43 kB)
+Installing collected packages: typing_extensions, python-docx
+
+Successfully installed python-docx-1.2.0 typing_extensions-4.14.0

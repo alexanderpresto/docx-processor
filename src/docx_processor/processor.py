@@ -15,6 +15,8 @@ from .image_handler import extract_images
 from .html_generator import create_index_html
 from .fallback_processor import extract_document_text
 from .chunking import DocumentChunker
+from .metadata_extractor import MetadataExtractor
+from .style_extractor import StyleExtractor
 
 # Custom style mappings to handle unsupported document styles
 STYLE_MAP = """
@@ -33,7 +35,8 @@ p[style-name='CodeBlock'] => pre.code-block
 
 def process_document(file_path, output_dir, image_quality=85, max_image_size=1200, 
                      output_format="both", extract_tables=False, 
-                     enable_chunking=False, max_chunk_tokens=2000, chunk_overlap=200):
+                     enable_chunking=False, max_chunk_tokens=2000, chunk_overlap=200,
+                     extract_metadata=False, extract_styles=False, include_comments=False):
     """Process Word document, extract content and images into structured JSON format."""
     
     # Create output directory if it doesn't exist
@@ -228,6 +231,51 @@ def process_document(file_path, output_dir, image_quality=85, max_image_size=120
                     "source_document": os.path.basename(file_path)
                 }, f, indent=2)
             print(f"Saved {len(chunks)} chunks to {chunked_output}")
+    
+    # Phase 2: Enhanced Metadata Extraction
+    if extract_metadata:
+        print("Extracting document metadata...")
+        metadata_extractor = MetadataExtractor()
+        metadata = metadata_extractor.extract_all_metadata(file_path)
+        
+        # Filter comments if not requested
+        if not include_comments:
+            metadata['comments'] = []
+        
+        # Save metadata as separate JSON file
+        if output_format in ["json", "both"]:
+            metadata_output = os.path.join(output_dir, "metadata.json")
+            metadata_extractor.save_metadata(metadata, metadata_output)
+        
+        # Add metadata summary to main document data
+        document_data["metadata_summary"] = metadata_extractor.get_metadata_summary(metadata)
+        document_data["metadata"] = metadata
+    
+    # Phase 2: Style Information Extraction
+    if extract_styles:
+        print("Extracting document styles...")
+        style_extractor = StyleExtractor()
+        styles = style_extractor.extract_all_styles(file_path)
+        
+        # Save styles as separate JSON file
+        if output_format in ["json", "both"]:
+            styles_output = os.path.join(output_dir, "styles.json")
+            style_extractor.save_styles(styles, styles_output)
+        
+        # Add style summary to main document data
+        document_data["style_summary"] = style_extractor.get_style_summary(styles)
+        document_data["styles"] = styles
+    
+    # Save separate comments file if requested and available
+    if include_comments and extract_metadata and document_data.get("metadata", {}).get("comments"):
+        comments_output = os.path.join(output_dir, "comments.json")
+        with open(comments_output, 'w', encoding='utf-8') as f:
+            json.dump({
+                "comments": document_data["metadata"]["comments"],
+                "source_document": os.path.basename(file_path),
+                "extraction_timestamp": document_data["metadata"]["extraction_timestamp"]
+            }, f, indent=2, ensure_ascii=False)
+        print(f"Saved {len(document_data['metadata']['comments'])} comments to {comments_output}")
     
     return document_data
 

@@ -8,10 +8,11 @@ A Python application that transforms Microsoft Word documents into structured, a
 
 - **Document Structure Extraction**: Hierarchical sections based on headers with semantic preservation
 - **Intelligent Document Chunking**: ✨ **NEW in v2.0** - Split documents into AI-friendly chunks with token counting and context preservation
+- **Enhanced Metadata Extraction**: ✨ **NEW in v2.0 Phase 2** - Comprehensive document properties, style analysis, and comment extraction
 - **Image Extraction**: Optimized embedded images with quality and size controls
 - **Table Extraction**: Convert document tables to structured data (CSV format)
 - **HTML Preview**: Interactive, navigable document preview with all components
-- **Metadata Preservation**: Document properties and structure maintained
+- **Style Analysis**: ✨ **NEW in v2.0 Phase 2** - Font, color, layout, and formatting information extraction
 
 ## Why Use docx-processor?
 
@@ -87,8 +88,22 @@ python main.py input.docx output_directory \
     --max-chunk-tokens 2000 \
     --chunk-overlap 200
 
+# ✨ NEW: Enhanced metadata and style extraction
+python main.py input.docx output_directory \
+    --extract-metadata \
+    --extract-styles \
+    --include-comments
+
+# ✨ Combined: Full v2.0 feature set
+python main.py input.docx output_directory \
+    --enable-chunking \
+    --extract-metadata \
+    --extract-styles \
+    --include-comments \
+    --extract-tables
+
 # Using as installed package
-docx-processor input.docx output_directory --enable-chunking
+docx-processor input.docx output_directory --enable-chunking --extract-metadata
 ```
 
 ### Command Line Options
@@ -98,6 +113,16 @@ docx-processor input.docx output_directory --enable-chunking
 - `--max-image-size`: Maximum dimension for resized images in pixels (default: 1200)
 - `--format`: Output format - json, html, or both (default: both)
 - `--extract-tables`: Extract tables to CSV files
+
+**✨ v2.0 Phase 1 - Intelligent Chunking:**
+- `--enable-chunking`: Enable intelligent document chunking for AI processing
+- `--max-chunk-tokens`: Maximum tokens per chunk (default: 2000)
+- `--chunk-overlap`: Token overlap between chunks for context preservation (default: 200)
+
+**✨ v2.0 Phase 2 - Enhanced Metadata:**
+- `--extract-metadata`: Extract comprehensive document metadata including properties, statistics, and revision history
+- `--extract-styles`: Extract style and formatting information including fonts, colors, and layout
+- `--include-comments`: Include document comments with positional context in extraction
 - `--version`: Show version information
 
 **✨ NEW Chunking Options (v2.0):**
@@ -110,7 +135,10 @@ docx-processor input.docx output_directory --enable-chunking
 ```
 output_directory/
 ├── document_structure.json  # Complete document structure and content
-├── document_chunks.json     # ✨ NEW: AI-ready chunks (if --enable-chunking used)
+├── document_chunks.json     # ✨ AI-ready chunks (if --enable-chunking used)
+├── metadata.json           # ✨ Comprehensive metadata (if --extract-metadata used)
+├── styles.json             # ✨ Style and formatting info (if --extract-styles used)
+├── comments.json           # ✨ Comments with context (if --include-comments used)
 ├── index.html              # Interactive HTML preview
 ├── images/                 # Extracted and optimized images
 │   ├── image_0.png
@@ -134,6 +162,24 @@ output_directory/
   - Context preservation with overlap
   - Section metadata and relationships
   - Chunk boundary information
+
+- **✨ metadata.json** (NEW): Comprehensive document metadata including:
+  - Document properties (title, author, creation/modification dates)
+  - Document statistics (page count, word count, character count)
+  - Revision history and version information
+  - Custom properties and application metadata
+
+- **✨ styles.json** (NEW): Style and formatting analysis including:
+  - Font families, sizes, and styling information
+  - Color schemes and theme information
+  - Layout settings (margins, headers, footers)
+  - Style usage statistics and relationships
+
+- **✨ comments.json** (NEW): Document comments with context including:
+  - Comment text and author information
+  - Positional context within the document
+  - Reply threads and revision tracking
+  - Timestamps and metadata
 
 - **index.html**: Interactive preview featuring:
   - Collapsible navigation sidebar

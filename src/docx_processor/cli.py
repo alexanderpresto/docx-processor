@@ -24,6 +24,13 @@ def main():
                        help="Maximum tokens per chunk (default: 2000)")
     parser.add_argument("--chunk-overlap", type=int, default=200,
                        help="Token overlap between chunks (default: 200)")
+    # Phase 2: Enhanced Metadata and Style Extraction
+    parser.add_argument("--extract-metadata", action="store_true",
+                       help="Extract comprehensive document metadata")
+    parser.add_argument("--extract-styles", action="store_true",
+                       help="Extract document style and formatting information")
+    parser.add_argument("--include-comments", action="store_true",
+                       help="Include comments in metadata extraction (requires --extract-metadata)")
     parser.add_argument("--version", action="version", version=f"docx-processor {__version__}")
     
     args = parser.parse_args()
@@ -44,7 +51,10 @@ def main():
             extract_tables=args.extract_tables,
             enable_chunking=args.enable_chunking,
             max_chunk_tokens=args.max_chunk_tokens,
-            chunk_overlap=args.chunk_overlap
+            chunk_overlap=args.chunk_overlap,
+            extract_metadata=args.extract_metadata,
+            extract_styles=args.extract_styles,
+            include_comments=args.include_comments
         )
         print(f"Document processed successfully. Output saved to {args.output}")
         return 0

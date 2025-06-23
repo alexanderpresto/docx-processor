@@ -6,6 +6,35 @@ This document provides a formal record of the docx-processor development process
 
 ## Version History
 
+### v2.0.0-beta (2025-06-22)
+
+Phase 2 completion and version update to beta:
+
+**📋 Version Update:**
+- Updated version from 2.0.0-alpha to 2.0.0-beta reflecting Phase 2 completion
+- Updated all package files (setup.py, pyproject.toml, version.py)
+- Added python-docx>=1.1.0 dependency to package configurations
+
+**📚 Documentation Updates:**
+- Enhanced README.md with comprehensive Phase 2 feature documentation
+- Added Phase 2 CLI options: --extract-metadata, --extract-styles, --include-comments
+- Updated output structure showing new JSON files (metadata.json, styles.json, comments.json)
+- Added detailed descriptions of new output file contents
+- Created examples/metadata_example.py demonstrating Phase 2 capabilities
+
+**🎯 Phase 2 Success Criteria Confirmed:**
+- ✅ All document properties accessible via CLI
+- ✅ Comments extracted with positional context
+- ✅ Style information mapped to document structure
+- ✅ No performance regression for basic operations
+- ✅ Backward compatibility maintained
+- ✅ Comprehensive test coverage implemented
+
+**📦 Ready for Phase 3:**
+- Version now at 2.0.0-beta with stable Phase 1 & 2 features
+- API Framework and AI Service Integration ready to begin
+- All foundational features completed and tested
+
 ### v2.0.0-alpha (2025-01-22)
 
 Major upgrade with AI-focused features:
@@ -79,6 +108,56 @@ Initial alpha release with core functionality:
 - NEW: `examples/chunking_example.py` - Demonstration script
 
 **Next Phase**: Enhanced metadata extraction (Phase 2) ready to begin.
+
+### 2025-06-22: v2.0 Phase 2 Implementation - Enhanced Metadata Extraction
+
+**Major Milestone**: Successfully completed Phase 2 of v2.0 development - comprehensive metadata and style extraction system.
+
+**Implementation Highlights:**
+- Created comprehensive `MetadataExtractor` class with full document property extraction
+- Implemented `StyleExtractor` class for document style and formatting analysis
+- Enhanced CLI with new parameters: `--extract-metadata`, `--extract-styles`, `--include-comments`
+- Extended processor.py with Phase 2 integration while maintaining backward compatibility
+- Added robust error handling with graceful degradation for missing metadata
+
+**Technical Achievements:**
+- Multi-source metadata extraction from core.xml, app.xml, custom.xml, and comments.xml
+- Style analysis including fonts, colors, layout, headers/footers, and usage statistics
+- Direct XML parsing with namespace support for comprehensive data access
+- Modular design ready for Phase 3 API integration
+- Enhanced output structure with separate JSON files for metadata and styles
+
+**Testing Results:**
+- Comprehensive test suite created with 5/5 tests passing
+- Module-level testing for MetadataExtractor and StyleExtractor classes
+- CLI integration verification and processor parameter validation
+- Error handling and graceful degradation testing completed
+
+**Files Created/Modified:**
+- NEW: `src/docx_processor/metadata_extractor.py` - Core metadata functionality
+- NEW: `src/docx_processor/style_extractor.py` - Style analysis functionality
+- NEW: `test_phase2.py` - Comprehensive Phase 2 test suite
+- ENHANCED: `src/docx_processor/processor.py` - Phase 2 integration
+- ENHANCED: `src/docx_processor/cli.py` - New CLI options
+- ENHANCED: `main.py` - Updated parameter passing
+- UPDATED: `requirements.txt` - Added python-docx dependency
+
+**Output Enhancements:**
+- New `metadata.json` file with comprehensive document properties
+- New `styles.json` file with style and formatting analysis
+- New `comments.json` file (when --include-comments used)
+- Enhanced `document_structure.json` with metadata and style summaries
+- Backward compatibility maintained for existing output formats
+
+**Phase 2 Success Criteria Met:**
+- ✅ All document properties accessible via CLI
+- ✅ Comments extracted with positional context
+- ✅ Style information mapped to document structure
+- ✅ No performance regression for basic operations
+- ✅ Backward compatibility maintained
+- ✅ Comprehensive test coverage implemented
+
+**Next Phase**: API Framework and AI Service Integration (Phase 3) ready to begin.
 
 ### 2025-03-20: Project Initialization
 
