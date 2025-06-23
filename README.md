@@ -54,7 +54,7 @@ source docx-processor-env/bin/activate
 
 # Create and activate virtual environment (WSL2 - Claude Code)
 # Note: Project is on Windows D: drive, accessed via mount point
-cd /mnt/d/Users/alexp/dev/docx-processor
+cd /path/to/docx-processor
 python -m venv docx-processor-env
 source docx-processor-env/bin/activate
 
@@ -191,8 +191,8 @@ output_directory/
 
 ### Working Directory
 
-- **Primary**: `D:\Users\alexp\dev\docx-processor`
-- **Archive**: `D:\Users\alexp\dev\docx-processor\archive`
+- **Primary**: Your project directory (e.g., `C:\projects\docx-processor`)
+- **Archive**: `<project_directory>\archive`
 
 ### Development Workflow
 

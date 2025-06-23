@@ -6,22 +6,22 @@ This guide provides quick reference for platform-specific commands and paths whe
 
 | Platform | Project Path | Archive Path |
 |----------|-------------|--------------|
-| Windows (Claude Desktop) | `D:\Users\alexp\dev\docx-processor` | `D:\Users\alexp\dev\docx-processor\archive` |
-| WSL2 (Claude Code) | `/mnt/d/Users/alexp/dev/docx-processor` | `/mnt/d/Users/alexp/dev/docx-processor/archive` |
+| Windows (Claude Desktop) | `C:\path\to\docx-processor` | `C:\path\to\docx-processor\archive` |
+| WSL2 (Claude Code) | `/mnt/c/path/to/docx-processor` | `/mnt/c/path/to/docx-processor/archive` |
 
 ## Virtual Environment Activation
 
 ### Windows (PowerShell)
 
 ```powershell
-cd "D:\Users\alexp\dev\docx-processor"
+cd "C:\path\to\docx-processor"
 .\docx-processor-env\Scripts\Activate.ps1
 ```
 
 ### WSL2/Linux (Bash)
 
 ```bash
-cd /mnt/d/Users/alexp/dev/docx-processor
+cd /mnt/c/path/to/docx-processor
 source docx-processor-env/bin/activate
 ```
 

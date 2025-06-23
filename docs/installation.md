@@ -19,13 +19,13 @@ This guide provides comprehensive instructions for installing and configuring th
 ### Windows (Claude Desktop)
 - Use PowerShell or Command Prompt
 - Virtual environment activation: `.\docx-processor-env\Scripts\Activate.ps1`
-- Native Windows paths: `D:\Users\alexp\dev\docx-processor`
+- Native Windows paths: `C:\path\to\docx-processor`
 
 ### WSL2 (Claude Code on Ubuntu)
 - Project is on Windows D: drive, accessed via mount point
 - Use bash terminal
 - Virtual environment activation: `source docx-processor-env/bin/activate`
-- WSL2 paths: `/mnt/d/Users/alexp/dev/docx-processor`
+- WSL2 paths: `/mnt/c/path/to/docx-processor`
 
 ### Linux/Mac (Native)
 - Use terminal

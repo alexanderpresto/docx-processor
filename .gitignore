@@ -158,3 +158,8 @@ processed_*/
 
 # Claude-specific files
 .claude
+
+
+# Pip installation artifacts
+=1.1.0
+=*
