@@ -155,3 +155,6 @@ processed_*/
 !tests/test_data/sample*.docx
 !tests/test_data/test*.docx
 !tests/test_data/fixtures/*.docx
+
+# Claude-specific files
+.claude
